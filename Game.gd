@@ -1,7 +1,8 @@
 extends Node2D
 
-onready var bullet_spawner_area = get_node("BulletHellSpawner")
-onready var timer := get_node("Timer") as Timer
+@onready var bullet_spawner_area = get_node("BulletHellSpawner")
+@onready var timer := get_node("Timer") as Timer
+@onready var fps_label = $FPSLabel
 
 var boundary_rect: Rect2
 
@@ -15,6 +16,9 @@ func _ready() -> void:
 		get_node("BottomRight").position - get_node("TopLeft").position
 	)
 	bullet_spawner_area.set_bounding_box(boundary_rect)
+
+func _process(delta):
+	fps_label.text = "FPS:{0}".format([Engine.get_frames_per_second()])
 
 # Spawn a bullet wave with a slightly different rotation
 func _on_Timer_timeout() -> void:

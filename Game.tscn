@@ -1,39 +1,45 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://effg3mt4yc7h"]
 
-[ext_resource path="res://Game.gd" type="Script" id=1]
-[ext_resource path="res://BulletHellSpawner.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Images/bullet1.png" type="Texture" id=3]
-[ext_resource path="res://Images/bullet2.png" type="Texture" id=4]
-[ext_resource path="res://Images/bullet3.png" type="Texture" id=5]
-[ext_resource path="res://Detector.tscn" type="PackedScene" id=6]
+[ext_resource type="Script" path="res://Game.gd" id="1"]
+[ext_resource type="PackedScene" path="res://BulletHellSpawner.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://bxkwj7hl1ndku" path="res://Images/bullet1.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://buy1bedd57vc5" path="res://Images/bullet2.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://24t2r46qkep5" path="res://Images/bullet3.png" id="5"]
+[ext_resource type="PackedScene" path="res://Detector.tscn" id="6"]
 
 [node name="Game" type="Node2D"]
-script = ExtResource( 1 )
+script = ExtResource("1")
 
-[node name="BulletHellSpawner" parent="." instance=ExtResource( 2 )]
-frames = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ) ]
+[node name="BulletHellSpawner" parent="." instance=ExtResource("2")]
+frames = [ExtResource("3"), ExtResource("4"), ExtResource("5")]
 image_change_offset = 0.1
 
 [node name="StartTimer" type="Timer" parent="."]
 autostart = true
 
 [node name="Timer" type="Timer" parent="."]
-process_mode = 0
 wait_time = 0.1
 
 [node name="Camera2D" type="Camera2D" parent="."]
-current = true
 
-[node name="TopLeft" type="Position2D" parent="."]
-position = Vector2( -510, -300 )
+[node name="TopLeft" type="Marker2D" parent="."]
+position = Vector2(-510, -300)
 
-[node name="BottomRight" type="Position2D" parent="."]
-position = Vector2( 510, 300 )
+[node name="BottomRight" type="Marker2D" parent="."]
+position = Vector2(510, 300)
 
-[node name="Detector" parent="." instance=ExtResource( 6 )]
-position = Vector2( -292, -129.836 )
+[node name="Detector" parent="." instance=ExtResource("6")]
+position = Vector2(-292, -129.836)
 
-[node name="Detector2" parent="." instance=ExtResource( 6 )]
-position = Vector2( 3.99997, -105.836 )
+[node name="Detector2" parent="." instance=ExtResource("6")]
+position = Vector2(3.99997, -105.836)
+
+[node name="FPSLabel" type="Label" parent="."]
+offset_left = -129.0
+offset_top = -294.0
+offset_right = -89.0
+offset_bottom = -271.0
+text = "FPS:60"
+
 [connection signal="timeout" from="StartTimer" to="." method="_on_StartTimer_timeout"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

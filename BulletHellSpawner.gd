@@ -1,14 +1,14 @@
 class_name BulletHellSpawner
 extends Node2D
 
-export (Array, Image) var frames
-export (float) var image_change_offset = 0.2
-export (float) var max_lifetime = 10.0
+@export var frames: Array[Texture2D]
+@export var image_change_offset := 0.2
+@export var max_lifetime := 10.0
 
-onready var origin := get_node("Origin") as Position2D
-onready var shared_area := get_node("SharedArea") as Area2D
+@onready var origin := get_node("Origin") as Marker2D
+@onready var shared_area := get_node("SharedArea") as Area2D
 
-onready var max_images = frames.size()
+@onready var max_images = frames.size()
 
 var bullets : Array = []
 var bounding_box : Rect2
@@ -17,7 +17,7 @@ var bounding_box : Rect2
 
 func _exit_tree() -> void:
 	for bullet in bullets:
-		Physics2DServer.free_rid((bullet as Bullet).shape_id)
+		PhysicsServer2D.free_rid((bullet as Bullet).shape_id)
 	bullets.clear()
 
 func _physics_process(delta: float) -> void:
@@ -43,7 +43,7 @@ func _physics_process(delta: float) -> void:
 		# Move the bullet and the collision
 		bullet.current_position += offset
 		used_transform.origin = bullet.current_position
-		Physics2DServer.area_set_shape_transform(
+		PhysicsServer2D.area_set_shape_transform(
 			shared_area.get_rid(), i, used_transform
 		)
 		
@@ -51,10 +51,9 @@ func _physics_process(delta: float) -> void:
 		bullet.lifetime += delta
 	
 	for bullet in bullets_queued_for_destruction:
-		Physics2DServer.free_rid(bullet.shape_id)
+		PhysicsServer2D.free_rid(bullet.shape_id)
 		bullets.erase(bullet)
-	
-	update()
+	queue_redraw()
 
 func _draw() -> void:
 	var offset = frames[0].get_size() / 2.0
@@ -96,11 +95,11 @@ func _configure_collision_for_bullet(bullet: Bullet) -> void:
 	used_transform.origin = bullet.current_position
 	  
 	# Create the shape
-	var _circle_shape = Physics2DServer.circle_shape_create()
-	Physics2DServer.shape_set_data(_circle_shape, 8)
+	var _circle_shape = PhysicsServer2D.circle_shape_create()
+	PhysicsServer2D.shape_set_data(_circle_shape, 8)
 
 	# Add the shape to the shared area
-	Physics2DServer.area_add_shape(
+	PhysicsServer2D.area_add_shape(
 		shared_area.get_rid(), _circle_shape, used_transform
 	)
 	

@@ -1,5 +1,5 @@
 class_name Bullet
-extends Reference
+extends RefCounted
 
 var shape_id : RID
 var movement_vector : Vector2
